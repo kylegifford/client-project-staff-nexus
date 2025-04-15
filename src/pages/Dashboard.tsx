@@ -66,8 +66,14 @@ export default function Dashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{employees.length}</div>
-            <p className="text-xs text-muted-foreground">Total team members</p>
+            <Link to="/employees" className="block">
+              <div className="text-2xl font-bold hover:underline">
+                {employees.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Total team members
+              </p>
+            </Link>
           </CardContent>
         </Card>
       </div>
