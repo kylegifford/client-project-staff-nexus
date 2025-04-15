@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "@/context/AppContext";
 import {
   Table,
@@ -42,8 +42,17 @@ export default function ProjectsList() {
     getEmployeesByProjectId 
   } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const statusFilter = queryParams.get("status");
 
-  const filteredProjects = projects.filter(
+  // Filter projects by status if the status filter is present
+  const statusFilteredProjects = statusFilter 
+    ? projects.filter(project => project.status === statusFilter)
+    : projects;
+
+  // Then apply text search filter on top of the status filtering
+  const filteredProjects = statusFilteredProjects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -59,6 +68,11 @@ export default function ProjectsList() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <FolderKanban className="h-6 w-6" /> Projects
+            {statusFilter && (
+              <span className="text-lg font-medium ml-2">
+                ({statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)})
+              </span>
+            )}
           </h1>
           <p className="text-muted-foreground">
             Manage your project database
@@ -76,9 +90,15 @@ export default function ProjectsList() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Projects</CardTitle>
+              <CardTitle>
+                {statusFilter 
+                  ? `${statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)} Projects` 
+                  : "All Projects"}
+              </CardTitle>
               <CardDescription>
-                A list of all projects in your database
+                {statusFilter
+                  ? `Showing ${filteredProjects.length} ${statusFilter} project(s)`
+                  : "A list of all projects in your database"}
               </CardDescription>
             </div>
             <div className="relative">
@@ -94,6 +114,18 @@ export default function ProjectsList() {
           </div>
         </CardHeader>
         <CardContent>
+          {statusFilter && (
+            <div className="mb-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className="mb-4"
+              >
+                <Link to="/projects">Clear filter</Link>
+              </Button>
+            </div>
+          )}
           <Table>
             <TableHeader>
               <TableRow>

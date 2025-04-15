@@ -34,10 +34,14 @@ export default function Dashboard() {
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{customers.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Total registered customers
-            </p>
+            <Link to="/customers" className="block">
+              <div className="text-2xl font-bold hover:underline">
+                {customers.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Total registered customers
+              </p>
+            </Link>
           </CardContent>
         </Card>
         <Card>
@@ -46,17 +50,21 @@ export default function Dashboard() {
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{projects.length}</div>
+            <Link to="/projects" className="block">
+              <div className="text-2xl font-bold hover:underline">
+                {projects.length}
+              </div>
+            </Link>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-xs text-muted-foreground">
+              <Link to="/projects?status=active" className="text-xs text-muted-foreground hover:underline">
                 {activeProjects} active
-              </span>
-              <span className="text-xs text-muted-foreground">
+              </Link>
+              <Link to="/projects?status=completed" className="text-xs text-muted-foreground hover:underline">
                 {completedProjects} completed
-              </span>
-              <span className="text-xs text-muted-foreground">
+              </Link>
+              <Link to="/projects?status=on-hold" className="text-xs text-muted-foreground hover:underline">
                 {onHoldProjects} on hold
-              </span>
+              </Link>
             </div>
           </CardContent>
         </Card>
