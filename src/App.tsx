@@ -3,9 +3,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
+import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
+import Auth from "./pages/Auth";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -20,45 +22,53 @@ import EmployeesList from "./pages/employees/EmployeesList";
 import EmployeeDetail from "./pages/employees/EmployeeDetail";
 import EmployeeForm from "./pages/employees/EmployeeForm";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AppProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Layout>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppProvider>
+            <Toaster />
+            <Sonner />
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/auth" element={<Auth />} />
               
-              {/* Customer Routes */}
-              <Route path="/customers" element={<CustomersList />} />
-              <Route path="/customers/:id" element={<CustomerDetail />} />
-              <Route path="/customers/new" element={<CustomerForm />} />
-              <Route path="/customers/edit/:id" element={<CustomerForm />} />
-              
-              {/* Project Routes */}
-              <Route path="/projects" element={<ProjectsList />} />
-              <Route path="/projects/:id" element={<ProjectDetail />} />
-              <Route path="/projects/new" element={<ProjectForm />} />
-              <Route path="/projects/edit/:id" element={<ProjectForm />} />
-              <Route path="/projects/assign/:id" element={<ProjectAssign />} />
-              
-              {/* Employee Routes */}
-              <Route path="/employees" element={<EmployeesList />} />
-              <Route path="/employees/:id" element={<EmployeeDetail />} />
-              <Route path="/employees/new" element={<EmployeeForm />} />
-              <Route path="/employees/edit/:id" element={<EmployeeForm />} />
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Dashboard />} />
+                  
+                  {/* Customer Routes */}
+                  <Route path="/customers" element={<CustomersList />} />
+                  <Route path="/customers/:id" element={<CustomerDetail />} />
+                  <Route path="/customers/new" element={<CustomerForm />} />
+                  <Route path="/customers/edit/:id" element={<CustomerForm />} />
+                  
+                  {/* Project Routes */}
+                  <Route path="/projects" element={<ProjectsList />} />
+                  <Route path="/projects/:id" element={<ProjectDetail />} />
+                  <Route path="/projects/new" element={<ProjectForm />} />
+                  <Route path="/projects/edit/:id" element={<ProjectForm />} />
+                  <Route path="/projects/assign/:id" element={<ProjectAssign />} />
+                  
+                  {/* Employee Routes */}
+                  <Route path="/employees" element={<EmployeesList />} />
+                  <Route path="/employees/:id" element={<EmployeeDetail />} />
+                  <Route path="/employees/new" element={<EmployeeForm />} />
+                  <Route path="/employees/edit/:id" element={<EmployeeForm />} />
+                </Route>
+              </Route>
               
               {/* Not Found */}
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/auth" replace />} />
             </Routes>
-          </Layout>
-        </BrowserRouter>
-      </AppProvider>
+          </AppProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
