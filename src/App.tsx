@@ -35,10 +35,9 @@ const App = () => (
             <Toaster />
             <Sonner />
             <Routes>
-              {/* Auth is disabled, redirect /auth to main app */}
-              <Route path="/auth" element={<Navigate to="/" replace />} />
+              <Route path="/auth" element={<Auth />} />
               
-              {/* Protected Routes - authentication temporarily bypassed */}
+              {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/" element={<Dashboard />} />
@@ -64,8 +63,8 @@ const App = () => (
                 </Route>
               </Route>
               
-              {/* Not Found - redirect to main app */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              {/* Not Found */}
+              <Route path="*" element={<Navigate to="/auth" replace />} />
             </Routes>
           </AppProvider>
         </AuthProvider>

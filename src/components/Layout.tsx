@@ -2,24 +2,21 @@
 import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import { useAuth } from "@/context/AuthContext";
-// import { Button } from "@/components/ui/button";
-// import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 interface LayoutProps {
   children?: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  // Authentication is currently disabled
-  // Uncomment when re-enabling authentication
-  // const { signOut, user } = useAuth();
+  const { signOut, user } = useAuth();
   
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto py-6 px-4">
-          {/* Authentication UI disabled
           <div className="flex justify-end mb-4">
             <div className="flex items-center gap-3">
               {user && (
@@ -40,7 +37,6 @@ export default function Layout({ children }: LayoutProps) {
               )}
             </div>
           </div>
-          */}
           {children}
         </div>
       </main>
